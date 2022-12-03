@@ -1,37 +1,25 @@
 # Google Sheets Based Website
 
-The goal of this experiment is to create a statically generated website that
-gets the data from Google Sheets and creates content based on that.
+On this experiment I created a statically generated website that
+gets the data from Google Sheets and displays content based on that.
 
-For the demo it will load a list of people from a Google Sheets and use it to
-render a static website.
+For the demo it load a list of people from an example spreadsheet.
 
-The website is very simple
-   - Show links to the associated Google Form and Google Sheets.
-   - Every person gets a card with their name and job title
-   - When the card is clicked, the card enlarges to fill the screen and the rest of the data is shown
+## Features
 
-Extra points if I can make a web-hook to re-render the static site when
-the sheet changes.
+✅ Load Google Sheets spreadsheet data from API and render website
+✅ Use Telegram avatar images based on Telegram usernames
+✅ Webhook that triggers Vercel re-deployment when Google Sheet changes
+[] A way to authorize the Google API key to access private spreadsheets
 
-Extra points for a way to authorize the Google API key to access a private spreadsheet (otherwise the spreadsheet has to be public)
 
-## Build Log
+## Next
 
-```
-yarn create astro gsheets-based-website
-cd gsheets-based-website
-```
+- Use browser history and make back button work when opening a card
+- Allow switch between cards and list view
+- Show little icons in cards indicating data availability
+- Share on...
+- Make proposal for money loops at...
+- Publish to Vercel and at https://gsheets-based-website.zequez.space
+- Re-publish it automatically when Google Sheet changes
 
-Updated this readme
-
-Added React and Tailwind
-
-```
-yarn astro add tailwind
-yarn astro add react
-```
-
-Updated package.json project name
-
-Commit code to Git

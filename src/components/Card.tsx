@@ -26,17 +26,10 @@ function Card({
   timestamp,
 }: CardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const miniCardRef = useRef(null);
-  const fullCardRef = useRef(null);
-  const animationRef = useRef(null);
 
   const avatarUrl =
     avatar ||
     `https://ui-avatars.com/api/?name=${name}&background=0D8ABC&color=fff&size=200`;
-
-  console.log("IS OPEN", isOpen);
-
-  function openCard() {}
 
   return (
     <li>
@@ -156,13 +149,15 @@ const FullCard = ({
         <div className="p-4">
           <h2 className="text-xl font-semibold">{name}</h2>
           <p className="text-gray-500 mb-4">{job}</p>
-          <CardLink text={website} href={website} />
-          <CardLink text={email} href={`mailto:${email}`} />
-          <CardLink
-            text={`@${telegramClean}`}
-            href={`https://t.me/${telegramClean}`}
-          />
-          <p className="mt-4 text-gray-700">{writing}</p>
+          {website && <CardLink text={website} href={website} />}
+          {email && <CardLink text={email} href={`mailto:${email}`} />}
+          {telegramClean && (
+            <CardLink
+              text={`@${telegramClean}`}
+              href={`https://t.me/${telegramClean}`}
+            />
+          )}
+          <p className="mt-4 text-gray-700 whitespace-pre-wrap">{writing}</p>
         </div>
       </div>
     </div>

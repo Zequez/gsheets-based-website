@@ -1,8 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card";
-// import * as fs from "fs";
-// import * as http from "http";
+import Info from "../components/Info.astro";
 import { parse } from "node-html-parser";
 
 const GOOGLE_API_KEY = import.meta.env.GOOGLE_API_KEY;
@@ -30,6 +29,10 @@ const rows: string[][] = data.values.slice(1);
 const people: Person[] = rows.map((row) =>
   Object.fromEntries(row.map((val, j) => [headers[j], val]))
 ) as Person[];
+people.push(people[0]);
+people.push(people[0]);
+people.push(people[0]);
+people.push(people[0]);
 
 async function fetchTelegramAvatarUrl(telegramHandle: string) {
   const username = telegramHandle.replace(/^@/, "");
@@ -65,37 +68,7 @@ await Promise.all(
         >Astro</span
       >
     </h1>
-    <p
-      class="bg-white mb-8 p-4 text-gray-700 rounded-lg border border-gray-200 shadow-sm"
-    >
-      To appear on this website <a
-        class="link"
-        href="https://docs.google.com/forms/d/e/1FAIpQLSeOUA-2nj6g24chRuVzdrJsUWxhtZn0NZSx82oWXm3UWw-4WQ/viewform?usp=sf_link"
-        >fill the Google form here</a
-      >.
-      <br />
-      Your response will be visible <a
-        class="link"
-        href="https://docs.google.com/spreadsheets/d/1UEa0Zpwu6YV4STZMQK4hjjOnBj0prpeh6zalVciWSq4/edit?resourcekey#gid=1128478487"
-        >on the spreadsheet here</a
-      >
-      <br />
-      This is an experiment to <a
-        href="https://medium.com/@Zequez/generate-static-website-based-on-google-sheets-data-132d7636843e"
-        >generate a static website based on Google Sheets data</a
-      >.
-      <br />
-      The source code is available at the <a
-        class="link"
-        href="https://github.com/zequez/gsheets-based-website"
-        >Github repository</a
-      >
-      <br />
-      If you feel inspired by the possibilities of this you can <a
-        class="link"
-        href="https://t.me/zequez">contact me on Telegram</a
-      > to make me a proposal.
-    </p>
+    <Info />
     <ul role="list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
       {
         people.map((person) => (
@@ -117,29 +90,4 @@ await Promise.all(
   </main>
 </Layout>
 
-<style>
-  .text-gradient {
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
-  }
-  .instructions code {
-    font-size: 0.875em;
-    font-weight: bold;
-    background: rgba(var(--accent), 12%);
-    color: rgb(var(--accent));
-    border-radius: 4px;
-    padding: 0.3em 0.45em;
-  }
-  .instructions strong {
-    color: rgb(var(--accent));
-  }
-  .link-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-    padding: 0;
-  }
-</style>
+<style></style>
