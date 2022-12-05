@@ -1,55 +1,60 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import fetchPeople, { Person } from "../lib/fetch-people";
+import getData, { Person } from "../spreadsheets/example";
+import { Text, Image } from "../components/items-widgets";
+import { Item } from "../lib/Item";
 
-const people = await fetchPeople();
+const people = await getData();
 
-const config: { [key: string]: keyof Person } = {
-  Avatar: "Avatar",
-  Name: "Full Name",
-  "Job Title": "Job Title",
-  Website: "Website",
-  Telegram: "Telegram Handle",
-  Message: "Freeform Writing Space",
-  "Last Updated": "Timestamp",
-};
+const items = [
+  new Item<Person>("telegramAvatarUrl", "Avatar", Image),
+  new Item<Person>("Full Name", "Name", Text),
+  new Item<Person>("Job Title", "Job Title", Text),
+  new Item<Person>("Website", "Website", Text),
+  new Item<Person>("telegramUsername", "Telegram", Text),
+  new Item<Person>("Freeform Writing Space", "Message", Text),
+  new Item<Person>("Timestamp", "Last Updated", Text),
+];
 
-console.log(people);
+const personTitle = "Full Name";
 
-const rowsNumber = Object.keys(config).length;
-const peopleCount = people.length;
+const itemTitleGridPosition = (i: number) =>
+  `grid-row-start: ${i + 1}; grid-row-end: ${
+    i + 2
+  }; grid-column-start: 1; grid-column-end: 2;`;
+
+const itemWidgetGridPosition = (itemNum: number, personNum: number) =>
+  `grid-column-start: ${personNum + 2}; grid-column-end: ${
+    personNum + 3
+  }; grid-row-start: ${itemNum + 1}; grid-row-end: ${itemNum + 2};`;
 ---
 
 <Layout title="Side by side demo">
   <div
-    class="grid bg-red-400"
-    style={` grid-template-columns: 200px repeat(${peopleCount}, 300px);`}
+    class="grid"
+    style={` grid-template-columns: 200px repeat(${people.length}, 300px);`}
   >
+    <div class="contents" title="Items">
+      {
+        items.map(({ title }, i) => (
+          <div
+            class="flex items-center justify-center bg-gray-200 border-b border-r border-dashed border-r-gray-400 border-b-gray-400"
+            style={itemTitleGridPosition(i)}
+          >
+            {title}
+          </div>
+        ))
+      }
+    </div>
     {
-      Object.keys(config).map((title, i) => (
-        <div
-          class="flex items-center justify-center bg-gray-300"
-          style={`grid-row-start: ${i + 1}; grid-row-end: ${
-            i + 2
-          }; grid-column-start: 1; grid-column-end: 2;`}
-        >
-          {title}
-        </div>
-      ))
-    }
-    {
-      Object.entries(config).map(([title, key], i) => (
-        <>
-          {people.map((p, j) => (
-            <div
-              style={`grid-column-start: ${j + 2}; grid-column-end: ${
-                j + 3
-              }; grid-row-start: ${i + 1}; grid-row-end: ${i + 2};`}
-            >
-              {p[key]}
+      people.map((p, j) => (
+        <div class="contents" title={p[personTitle]}>
+          {items.map(({ dataFrom, title, renderWith: Renderer }, i) => (
+            <div title={title} style={itemWidgetGridPosition(i, j)}>
+              <Renderer input={p[dataFrom]} />
             </div>
           ))}
-        </>
+        </div>
       ))
     }
   </div>

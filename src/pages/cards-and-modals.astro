@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card";
-import fetchPeople from "../lib/fetch-people";
+import getData from "../spreadsheets/example";
 
-const people = await fetchPeople();
+const people = await getData();
 ---
 
 <!-- <script define:vars={{ people }}>
@@ -23,7 +23,7 @@ const people = await fetchPeople();
             email={person["Email Address"]}
             telegram={person["Telegram Handle"]}
             writing={person["Freeform Writing Space"]}
-            avatar={person["Avatar"]}
+            avatar={person["telegramAvatarUrl"]}
             subscribed={person["Subscribe to my newsletter?"]}
             timestamp={person["Timestamp"]}
           />
