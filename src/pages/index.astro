@@ -1,91 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "../components/Card";
 import Info from "../components/Info.astro";
-import { parse } from "node-html-parser";
-
-const GOOGLE_API_KEY = import.meta.env.GOOGLE_API_KEY;
-const SHEET_ID = "1UEa0Zpwu6YV4STZMQK4hjjOnBj0prpeh6zalVciWSq4";
-const range = `/values/Responses`;
-
-type Person = {
-  Timestamp: string;
-  "Email Address": string;
-  Website: string;
-  "Job Title": string;
-  Avatar: string | null;
-  "Telegram Handle": string;
-  "Freeform Writing Space": string;
-  "Subscribe to my newsletter?": string;
-  "Full Name": string;
-};
-
-const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}${range}?key=${GOOGLE_API_KEY}`;
-
-const response = await fetch(url);
-const data = await response.json();
-const headers: string[] = data.values[0];
-const rows: string[][] = data.values.slice(1);
-const people: Person[] = rows.map((row) =>
-  Object.fromEntries(row.map((val, j) => [headers[j], val]))
-) as Person[];
-people.push(people[0]);
-people.push(people[0]);
-people.push(people[0]);
-people.push(people[0]);
-
-async function fetchTelegramAvatarUrl(telegramHandle: string) {
-  const username = telegramHandle.replace(/^@/, "");
-  const response = await fetch(`https://t.me/${username}`);
-  const htmlPage = await response.text();
-  const dom = parse(htmlPage);
-  const avatarImg = dom.querySelector(
-    ".tgme_page_photo_image"
-  ) as HTMLImageElement | null;
-  return avatarImg && avatarImg.getAttribute("src");
-}
-
-// Load all the Telegram avatars URLs
-await Promise.all(
-  people.map(async (p, i) => {
-    const avatarUrl = p["Telegram Handle"]
-      ? await fetchTelegramAvatarUrl(p["Telegram Handle"])
-      : null;
-    console.log("Loaded!", avatarUrl);
-    people[i]["Avatar"] = avatarUrl;
-  })
-);
+import DemoCard from "../components/DemoCard.astro";
 ---
-
-<script define:vars={{ people }}>
-  console.log(people);
-</script>
 
 <Layout title="Google Sheets Based Website Experiment">
   <main class="p-8 mx-auto max-w-5xl">
     <h1 class="text-4xl mb-8 font-bold text-gray-800">
-      Google Sheets Based Website Experiment <span class="text-gradient"
-        >Astro</span
-      >
+      Google Sheets Based Website Experiment
     </h1>
     <Info />
     <ul role="list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {
-        people.map((person) => (
-          <Card
-            client:load
-            name={person["Full Name"]}
-            job={person["Job Title"]}
-            website={person["Website"]}
-            email={person["Email Address"]}
-            telegram={person["Telegram Handle"]}
-            writing={person["Freeform Writing Space"]}
-            avatar={person["Avatar"]}
-            subscribed={person["Subscribe to my newsletter?"]}
-            timestamp={person["Timestamp"]}
-          />
-        ))
-      }
+      <DemoCard title="Cards and Modals" url="/cards-and-modals" />
+      <DemoCard title="Side by Side" url="/side-by-side" />
     </ul>
   </main>
 </Layout>

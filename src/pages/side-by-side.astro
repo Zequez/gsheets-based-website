@@ -1,0 +1,56 @@
+---
+import Layout from "../layouts/Layout.astro";
+import fetchPeople, { Person } from "../lib/fetch-people";
+
+const people = await fetchPeople();
+
+const config: { [key: string]: keyof Person } = {
+  Avatar: "Avatar",
+  Name: "Full Name",
+  "Job Title": "Job Title",
+  Website: "Website",
+  Telegram: "Telegram Handle",
+  Message: "Freeform Writing Space",
+  "Last Updated": "Timestamp",
+};
+
+console.log(people);
+
+const rowsNumber = Object.keys(config).length;
+const peopleCount = people.length;
+---
+
+<Layout title="Side by side demo">
+  <div
+    class="grid bg-red-400"
+    style={` grid-template-columns: 200px repeat(${peopleCount}, 300px);`}
+  >
+    {
+      Object.keys(config).map((title, i) => (
+        <div
+          class="flex items-center justify-center bg-gray-300"
+          style={`grid-row-start: ${i + 1}; grid-row-end: ${
+            i + 2
+          }; grid-column-start: 1; grid-column-end: 2;`}
+        >
+          {title}
+        </div>
+      ))
+    }
+    {
+      Object.entries(config).map(([title, key], i) => (
+        <>
+          {people.map((p, j) => (
+            <div
+              style={`grid-column-start: ${j + 2}; grid-column-end: ${
+                j + 3
+              }; grid-row-start: ${i + 1}; grid-row-end: ${i + 2};`}
+            >
+              {p[key]}
+            </div>
+          ))}
+        </>
+      ))
+    }
+  </div>
+</Layout>
