@@ -1,20 +1,19 @@
 import { parse } from "node-html-parser";
 import * as fs from "fs";
 import * as path from "path";
-// import { Axios } from "axios";
-
-// const axios = new Axios();
 
 const rootDir = process.cwd();
-const publicDir = path.join(rootDir, "public");
-const avatarsCachePath = path.join(publicDir, ".cache/telegram-avatars");
+const production = import.meta.env.PROD;
+const baseOutputDir = path.join(rootDir, production ? "dist" : "public");
+const avatarsCachePath = path.join(baseOutputDir, ".cache/telegram-avatars");
+fs.mkdirSync(avatarsCachePath, { recursive: true });
 
 function escapeRegExp(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
 }
 
 const avatarsPublicPathReplacer = (p: string) =>
-  p.replace(new RegExp(`^${escapeRegExp(publicDir)}`), "");
+  p.replace(new RegExp(`^${escapeRegExp(baseOutputDir)}`), "");
 
 const avatarPath = (username: string) => {
   return path.join(avatarsCachePath, `${username}.jpg`);
