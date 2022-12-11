@@ -16,6 +16,7 @@ export type Person = {
   "Freeform Writing Space": string;
   "Subscribe to my newsletter?": string;
   "Full Name": string;
+  "Gratitude Virtual Currency Accounting": string;
 } & TelegramTransformerAdditions;
 
 async function getData(): Promise<Person[]> {
